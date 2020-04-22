@@ -51,9 +51,26 @@ public class Gantt extends PApplet
 		colorMode(HSB);
 	}
 
+	public void displayTasks()
+	{
+		
+        for(int i = 0; i < tasksArray.size(); i++)
+        {
+            Task tA = tasksArray.get(i);
+
+			float x = map(i, 0,tasksArray.size(), 100, width-100);
+			float y = map(i, 0,tasksArray.size(), 100, height-100);
+
+            fill(i*tA.getStarts(),255,255);
+            rect(x, y, tA.getStarts()+tA.getEnds(), 50);
+			
+        }
+	}
+
 	
 	public void draw()
 	{			
 		background(0);
+		displayTasks();
 	}
 }
