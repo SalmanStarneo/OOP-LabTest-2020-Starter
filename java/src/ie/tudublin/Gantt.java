@@ -9,14 +9,13 @@ import processing.data.TableRow;
 public class Gantt extends PApplet
 {	
 	ArrayList<Task> tasksArray = new ArrayList<Task>();
-	
+	float[] taskHeightArray = new float[9];
 	public void settings()
 	{
 		size(800, 600);
 		borderX = width * 0.9f;
 		borderY= height *0.06f;
-		mouseKeycode1=-1;
-		mouseKeycode2=-2;
+		
 		taskSatrtpoint=0;
 		taskEndpoint=0;
 	}
@@ -25,8 +24,8 @@ public class Gantt extends PApplet
 	float borderX;
 	float taskSatrtpoint;
 	float taskEndpoint;
-	float mouseKeycode1;
-	float mouseKeycode2;
+	float mouseKeycode1=-1;
+	float mouseKeycode2=-1;
 
 	public void loadTasks()
 	{
@@ -52,14 +51,18 @@ public class Gantt extends PApplet
 		for(int m=0 ; m<tasksArray.size() ;m++)
 		{
 			Task tA =tasksArray.get(m);
-			float mouseHeighX1= map(tA.getStarts(), 1, 30, 90, borderX);
-			float mouseHeighX2 = map(tA.getEnds(), 1, 30, 90, borderX);
-			float mouseHeighY=map(m, 0,tasksArray.size(), 100, height-borderY);
-			if (dist(mouseX, mouseY, mouseHeighX1, mouseHeighY)<dist(mouseX, mouseY, mouseHeighX2, mouseHeighY))
+			float mouseDest1= map(tA.getStarts(), 1, 30, 90, borderX);
+			float mouseDest2 = map(tA.getEnds(), 1, 30, 90, borderX);
+			float mouseDwidth= map((tA.getEnds()-tA.getStarts())/2, 1, 30, 90, borderX);
+			float mouseDestY=map(m, 0,tasksArray.size(), 100, height-borderY);
+			taskHeightArray[m]=mouseDestY;
+			if (mouseX>=mouseDest1&&mouseX<mouseDwidth&&mouseDestY-30<mouseY&&mouseDestY+30>mouseY)
 			{
+
 				if(mouseKeycode1==-1){	
-					println("Mouse pressed L");
-					mouseKeycode1=m;	
+					println("Mouse pressed L"+m);
+					// mouseKeycode1=m;	
+					// println(distL);
 				}
 				else
 				{
@@ -67,13 +70,13 @@ public class Gantt extends PApplet
 				}
 				
 			}
-			else if(dist(mouseX, mouseY, mouseHeighX2, mouseHeighY)>dist(mouseX, mouseY, mouseHeighX1, mouseHeighY))
+			else if(mouseX<=mouseDest2&&mouseDwidth<mouseX&&mouseDestY-30<mouseY&&mouseDestY+30>mouseY)
 			{
 				if(mouseKeycode2==-1)
 				{
 					
-					mouseKeycode2=m;
-					println("Mouse pressed R");
+					// mouseKeycode2=m;
+					println("Mouse pressed R"+m);
 				}
 				else
 				{
@@ -92,9 +95,14 @@ public class Gantt extends PApplet
 			
 			if (mouseKeycode1!=-1 && mouseKeycode2==-1)
 			{
-				fill(255);
-				ellipse(mouseX, mouseY, 90, 90);
-				// taskSatrtpoint=+20;
+				if(mouseX>mouseX+1)
+				{
+					taskSatrtpoint++;
+				}
+				else if(mouseX<mouseX+1)
+				{
+					taskSatrtpoint--;
+				}
 				println("Mouse Dragged L");	
 			}
 			else if (mouseKeycode2!=-1 && mouseKeycode1==-1)
@@ -111,6 +119,7 @@ public class Gantt extends PApplet
 	{
 		loadTasks();
 		printTasks();
+		println(taskHeightArray);
 		colorMode(HSB);
 		textSize(14);
 	}
@@ -120,13 +129,15 @@ public class Gantt extends PApplet
 		int i=0;
 		float xStart;
 		float xEnd;
+		float y;
         for(Task tA:tasksArray)
         {
 
-			xStart = map(tA.getStarts()-taskSatrtpoint, 1, 30, 90, borderX);
+			xStart = map(tA.getStarts()+taskSatrtpoint, 1, 30, 90, borderX);
 			xEnd = map(tA.getEnds()+taskEndpoint, 1, 30, 90, borderX);
+		
 			float taskwidth= xEnd-xStart;
-			float y = map(i, 0,tasksArray.size(), 100, height-borderY);
+			y = map(i, 0,tasksArray.size(), 100, height-borderY);
 			noStroke();
             fill((i)*(30),255,255);
 			rect(xStart, y,taskwidth, 30);
@@ -136,7 +147,8 @@ public class Gantt extends PApplet
 			text(tA.getTasks(), 50, y+10);
 			i++;
 			
-        }
+		}
+		
 	}
 
     public void drawGrid()
