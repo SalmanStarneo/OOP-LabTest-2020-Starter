@@ -60,17 +60,38 @@ public class Gantt extends PApplet
 
 			float x = map(i, 0,tasksArray.size(), 100, width-100);
 			float y = map(i, 0,tasksArray.size(), 100, height-100);
-
+			noStroke();
             fill(i*tA.getStarts(),255,255);
             rect(x, y, tA.getStarts()+tA.getEnds(), 50);
 			
         }
 	}
 
+	    
+    public void drawGrid()
+    {
+        float border = width * 0.05f;
+
+        stroke(0, 0, 255);
+        textAlign(CENTER, CENTER);
+		for(int i = 1 ; i <= 30 ; i ++)
+        {
+			// Task tA = tasksArray.get(i);
+            float x = map(i, 1, 30, border, width - border);
+            line(x, border, x, height - border);
+            // line(border, x, width - border, x);    
+            
+            fill(255);
+            text(i, x, border / 2);
+            // text(i, border / 2, x);
+        }
+    }
 	
 	public void draw()
 	{			
 		background(0);
+		drawGrid();
 		displayTasks();
+		
 	}
 }
