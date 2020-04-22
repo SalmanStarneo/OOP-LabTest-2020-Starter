@@ -15,7 +15,7 @@ public class Gantt extends PApplet
 		size(800, 600);
 		borderX = width * 0.9f;
 		borderY= height *0.06f;
-		
+		//These two variables if mouseDragged(), worked it would moved the tasks
 		taskSatrtpoint=0;
 		taskEndpoint=0;
 	}
@@ -53,14 +53,16 @@ public class Gantt extends PApplet
 			Task tA =tasksArray.get(m);
 			float mouseDest1= map(tA.getStarts(), 1, 30, 90, borderX);
 			float mouseDest2 = map(tA.getEnds(), 1, 30, 90, borderX);
-			float mouseDwidth= map((tA.getEnds()-tA.getStarts())/2, 1, 30, 90, borderX);
+			//cannot get the mid point between start and end of task for some reason
+			float mouseDwidth=(mouseDest2)/30;
 			float mouseDestY=map(m, 0,tasksArray.size(), 100, height-borderY);
 			taskHeightArray[m]=mouseDestY;
-			if (mouseX>=mouseDest1&&mouseX<mouseDwidth&&mouseDestY-30<mouseY&&mouseDestY+30>mouseY)
+			if (mouseX>=mouseDest1 && mouseX<mouseDwidth&&mouseDestY-30<mouseY&&mouseDestY+30>mouseY)
 			{
 
+
 				if(mouseKeycode1==-1){	
-					println("Mouse pressed L"+m);
+					println("Mouse pressed L"+m+"//"+mouseDwidth);
 					// mouseKeycode1=m;	
 					// println(distL);
 				}
@@ -76,7 +78,7 @@ public class Gantt extends PApplet
 				{
 					
 					// mouseKeycode2=m;
-					println("Mouse pressed R"+m);
+					println("Mouse pressed R"+m+"//"+mouseDwidth);
 				}
 				else
 				{
@@ -119,7 +121,6 @@ public class Gantt extends PApplet
 	{
 		loadTasks();
 		printTasks();
-		println(taskHeightArray);
 		colorMode(HSB);
 		textSize(14);
 	}
