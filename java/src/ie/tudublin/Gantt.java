@@ -49,6 +49,7 @@ public class Gantt extends PApplet
 		loadTasks();
 		printTasks();
 		colorMode(HSB);
+		textSize(14);
 	}
 
 	public void displayTasks()
@@ -61,11 +62,11 @@ public class Gantt extends PApplet
 			float x = map(i, 0,tasksArray.size(), 100, width-100);
 			float y = map(i, 0,tasksArray.size(), 100, height-100);
 			noStroke();
-            fill(i*tA.getStarts(),255,255);
-			rect(x, y, tA.getStarts()+tA.getEnds(), 50);
+            fill(i*tA.getEnds(),255,255);
+			rect(x, y, tA.getStarts()+tA.getEnds(), 30);
 			fill(255);
 			textAlign(CENTER, CENTER);
-			text(tA.getTasks(), 50, y);
+			text(tA.getTasks(), 50, y+10);
 			
         }
 	}
